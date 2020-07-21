@@ -1101,13 +1101,11 @@ if (UNIX)
         # We can't strip everything since a client's _USES_DR_VERSION_ will be
         # removed, so we only strip debug (-g) and local (-x):
         # i#572: We used to pass -p here, but that floors the mtime.
-        "${CMAKE_STRIP} -g ${strip_local} <TARGET>"
         )
       SET(CMAKE_C_LINK_EXECUTABLE
         "<CMAKE_C_COMPILER> <FLAGS> <CMAKE_C_LINK_FLAGS> <LINK_FLAGS> ${exe_link_extra} <OBJECTS>  -o <TARGET> <LINK_LIBRARIES>"
         "${CMAKE_OBJCOPY} --only-keep-debug <TARGET> <TARGET>.debug"
         "${CMAKE_OBJCOPY} --add-gnu-debuglink=<TARGET>.debug <TARGET>"
-        "${CMAKE_STRIP} -g ${strip_local} <TARGET>"
         )
       set(CMAKE_CXX_CREATE_SHARED_LIBRARY
         # standard rule
@@ -1120,13 +1118,11 @@ if (UNIX)
         # We can't strip everything since a client's _USES_DR_VERSION_ will be
         # removed, so we only strip debug (-g) and local (-x):
         # i#572: We used to pass -p here, but that floors the mtime.
-        "${CMAKE_STRIP} -g ${strip_local} <TARGET>"
         )
       SET(CMAKE_CXX_LINK_EXECUTABLE
         "<CMAKE_CXX_COMPILER> <FLAGS> <CMAKE_CXX_LINK_FLAGS> <LINK_FLAGS> ${exe_link_extra} <OBJECTS>  -o <TARGET> <LINK_LIBRARIES>"
         "${CMAKE_OBJCOPY} --only-keep-debug <TARGET> <TARGET>.debug"
         "${CMAKE_OBJCOPY} --add-gnu-debuglink=<TARGET>.debug <TARGET>"
-        "${CMAKE_STRIP} -g ${strip_local} <TARGET>"
         )
     endif (NOT flag_present)
   else (SPLIT_SYMBOLS AND EXISTS ${CMAKE_OBJCOPY} AND EXISTS ${CMAKE_STRIP})
@@ -1339,9 +1335,7 @@ if (WIN32)
   string(REGEX REPLACE "${tmpfile_nm}[ \r\n]*" "" cpp_err "${cpp_err}")
   string(STRIP "${cpp_err}" cpp_err)
 endif (WIN32)
-if (cpp_result OR cpp_err)
-  message(FATAL_ERROR "*** ${CMAKE_CPP} failed: ***\n${cpp_err}")
-endif (cpp_result OR cpp_err)
+
 string(REGEX MATCHALL
   "-D[^ \r\n]+" defines "${cpp_out}")
 string(REGEX REPLACE
